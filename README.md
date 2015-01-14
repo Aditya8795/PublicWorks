@@ -7,11 +7,11 @@ Sanitation Review - Android Application
 Members
 ----------
 
-* Vishnu G T
+* [Vishnu Gt][1]
 
-* Aditya A Prasad
+* [Aditya A Prasad][2]
 
-* Abhishek Kaushik - Mentor
+* [Abhishek Kaushik][3] - Mentor
 
 
 Overview
@@ -22,7 +22,7 @@ It will be used by volunteers to visit government facilities such as toilets & l
 and gather data that will be send to the government server for review.
 This will be used to make sure the money being dispersed for these facilities are being used
 for the correct purpose.
-The fluid UI for the application is available [here][1].
+The fluid UI for the application is available [here][4].
 
 
 Features
@@ -46,4 +46,7 @@ This will ensure that the volunteer was physically present at the location when 
 a maximum of 4 images to the server.
 
 
-[1]: https://www.fluidui.com/editor/live/preview/p_y4JUtRyz6cc2o762Q3HdPZVve4l7Sizi.1420968044593
+[1]: http://www.facebook.com/vishnugt95
+[2]: https://github.com/Aditya8795
+[3]: https://github.com/stndlkr200
+[4]: https://www.fluidui.com/editor/live/preview/p_y4JUtRyz6cc2o762Q3HdPZVve4l7Sizi.1420968044593
