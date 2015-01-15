@@ -1,7 +1,9 @@
 package com.vishnu.aditya.sanitationreview;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -9,8 +11,19 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+
 
 public class Login extends ActionBarActivity {
+
+
+    String employeeID=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,17 +49,17 @@ public class Login extends ActionBarActivity {
     public void attemptLogin(View v){
         // Take the employee ID entered by the user
         EditText empId = (EditText)findViewById(R.id.empId);
-        String employeeID = empId.getText().toString();
+        employeeID = empId.getText().toString();
 
         // check if user has not entered any valid string.
-        if(employeeID.trim().length() == 0){
+        if(employeeID.matches("")){
             // alert the user to enter the ID
             Toast.makeText(this,"Please enter a Employee ID",Toast.LENGTH_SHORT).show();
             return;
         }
-
+        Log.i("TEctcnhc","not tarted");
         // This sends the employee ID to the server for verification
-        new EmployeeSender(this).execute(employeeID);
+        new TestAsynch().execute();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -69,4 +82,70 @@ public class Login extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
+    class TestAsynch extends AsyncTask<Void, Integer, String>
+    {
+
+        String baseurl = "http://5313ee71.ngrok.com/admin-panel-sanitation/checkDatabase.php/?key="+employeeID;
+        String readfromwebpage=null;
+
+        protected String doInBackground(Void...arg0) {
+            URL url = null;
+            Log.i("inide", "doinbackground");
+            try {
+                url = new URL(baseurl);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            URLConnection con = null;
+            try {
+                con = url.openConnection();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            InputStream in = null;
+            try {
+                in = con.getInputStream();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            String encoding = con.getContentEncoding();
+            encoding = encoding == null ? "UTF-8" : encoding;
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            byte[] buf = new byte[8192];
+            int len = 0;
+            try {
+                while ((len = in.read(buf)) != -1)
+                {
+                    baos.write(buf, 0, len);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                readfromwebpage= new String(baos.toByteArray(), encoding);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+
+        protected void onPostExecute(String result) {
+        Log.i(readfromwebpage, "done");
+            if(readfromwebpage.equals("1"))
+            {
+                Toast.makeText(getApplicationContext(),"Login Successful", Toast.LENGTH_SHORT).show();
+            }
+            else
+            {
+
+                Toast.makeText(getApplicationContext(),"Login UnSuccessful", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
 }

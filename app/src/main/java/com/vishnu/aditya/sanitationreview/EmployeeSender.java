@@ -18,7 +18,8 @@ import java.io.InputStreamReader;
  * Created by Aditya on 1/15/2015.
  */
 public class EmployeeSender extends AsyncTask<String, Void, Boolean> {
-    String url = "localhost/admin-panel-sanitation/checkDatabase.php";
+    //String url = "localhost/admin-panel-sanitation/checkDatabase.php";
+    String url = "http://5313ee71.ngrok.com/admin-panel-sanitation/checkDatabase.php";
 
     public EmployeeSender(Login login) {
 
@@ -27,19 +28,21 @@ public class EmployeeSender extends AsyncTask<String, Void, Boolean> {
     @Override
     protected Boolean doInBackground(String... empID) {
         HttpClient httpclient = new DefaultHttpClient();
-        HttpGet httpget = new HttpGet(url);
-        
+        HttpGet httpget = new HttpGet(url+"/?key="+empID[0]);
+        Log.i("Start","begin trying with "+url+"/?key="+empID[0]);
         try {
             HttpResponse response = httpclient.execute(httpget);
             if(response != null) {
                 String line = "";
                 InputStream inputstream = response.getEntity().getContent();
                 line = convertStreamToString(inputstream);
-                Log.i("Response from server",line);
+                Log.i("Response from server",empID[0]);
                 if(line == "0"){
+                    Log.i("FALSE","means 0");
                     return Boolean.FALSE;
                 }
-                else if(line == "1"){
+                else if(line.equals("1")){
+                    Log.i("FALSE","means 0");
                     return  Boolean.TRUE;
                 }
             } else {
