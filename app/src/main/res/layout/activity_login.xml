@@ -15,10 +15,10 @@
         android:singleLine="true"
         android:lines="1"
         android:scrollHorizontally="true"
+        android:gravity="center_horizontal"
         android:ellipsize="end"
         android:layout_weight="1"
         android:textSize="@dimen/abc_text_size_large_material"
-        android:background="@drawable/oval_edittext"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="207dp" />
