@@ -20,6 +20,7 @@ public class Login extends ActionBarActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_login, menu);
         return true;
+        //just a try to work on two pc simultaneously using git
     }
 
     @Override
