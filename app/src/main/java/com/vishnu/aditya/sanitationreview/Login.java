@@ -3,11 +3,13 @@ package com.vishnu.aditya.sanitationreview;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -30,6 +32,17 @@ public class Login extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        //customizing xml
+        Button button = (Button) findViewById(R.id.button);
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        int width = displaymetrics.widthPixels;
+        int buttonWidth = width/3;
+        button.setWidth(buttonWidth);
+        EditText editText = (EditText) findViewById(R.id.empId);
+        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        int etwidth = width/2;
+        editText.setWidth(etwidth);
         // set a listener for the EditText
         ((EditText)this.findViewById(R.id.empId)).setOnKeyListener(new View.OnKeyListener() {
 
@@ -54,7 +67,8 @@ public class Login extends ActionBarActivity {
         // check if user has not entered any valid string.
         if(employeeID.matches("")){
             // alert the user to enter the ID
-            Toast.makeText(this,"Please enter a Employee ID",Toast.LENGTH_SHORT).show();
+            empId.setError("Enter Volunteer's ID");
+            //Toast.makeText(this,"Please enter a Employee ID",Toast.LENGTH_SHORT).show();
             return;
         }
         Log.i("TEctcnhc","not tarted");

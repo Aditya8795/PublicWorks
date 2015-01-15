@@ -18,16 +18,20 @@
         android:ellipsize="end"
         android:layout_weight="1"
         android:textSize="@dimen/abc_text_size_large_material"
-        android:layout_above="@+id/button"
-        android:layout_centerHorizontal="true" />
+        android:background="@drawable/oval_edittext"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="207dp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/login"
         android:id="@+id/button"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:onClick="attemptLogin" />
+        android:onClick="attemptLogin"
+        android:background="@drawable/login_button_background"
+        android:layout_marginTop="71dp"
+        android:layout_below="@+id/empId"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
