@@ -3,73 +3,71 @@ package com.vishnu.aditya.sanitationreview;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-
-import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 
 /**
- * Created by Aditya on 1/15/2015.
+ * Created by Aditya on 1/15/2015.*vishnu
  */
 public class EmployeeSender extends AsyncTask<String, Void, Boolean> {
     //String url = "localhost/admin-panel-sanitation/checkDatabase.php";
-    String url = "http://5313ee71.ngrok.com/admin-panel-sanitation/checkDatabase.php";
+    String url = "http://5313ee71.ngrok.com/admin-panel-sanitation/checkDatabase.php/?key=";
 
-    public EmployeeSender(Login login) {
-
-    }
 
     @Override
     protected Boolean doInBackground(String... empID) {
-        HttpClient httpclient = new DefaultHttpClient();
-        HttpGet httpget = new HttpGet(url+"/?key="+empID[0]);
-        Log.i("Start","begin trying with "+url+"/?key="+empID[0]);
+
+        if(empID[0]==null){
+            return null;
+        }
+        // Ensure URL is of proper form
         try {
-            HttpResponse response = httpclient.execute(httpget);
-            if(response != null) {
-                String line = "";
-                InputStream inputstream = response.getEntity().getContent();
-                line = convertStreamToString(inputstream);
-                Log.i("Response from server",empID[0]);
-                if(line == "0"){
-                    Log.i("FALSE","means 0");
+            URL tested_url = new URL(url+empID[0]);
+            Log.i("the empId",empID[0]);
+            URLConnection connection = tested_url.openConnection();
+            InputStream inputStream = connection.getInputStream();
+
+            String encoding = connection.getContentEncoding();
+            if (encoding == null) encoding = "UTF-8";
+            else encoding = encoding;
+
+            ByteArrayOutputStream outputByteByByte = new ByteArrayOutputStream();
+            byte[] buffer = new byte[8192];
+            int len = 0;
+            try {
+                // Read the inputStream using the buffer
+                while ((len = inputStream.read(buffer)) != -1) {
+                    // write what you get to the outputByteByByte variable
+                    outputByteByByte.write(buffer, 0, len);
+                }
+
+                String serverResponse = new String(outputByteByByte.toByteArray(), encoding);
+                Log.i("the server response",serverResponse);
+
+                if (serverResponse.equals("1")) {
+                    return Boolean.TRUE;
+                } else {
                     return Boolean.FALSE;
                 }
-                else if(line.equals("1")){
-                    Log.i("FALSE","means 0");
-                    return  Boolean.TRUE;
-                }
-            } else {
-                Log.i("Error","Unable to complete your request");
+
+            } catch (IOException e) {
+                Log.i("IOException", "buffer to outputByteByByte");
+                e.printStackTrace();
             }
-        } catch (ClientProtocolException e) {
-            Log.i("Error","ClientProtocolException");
+
+        } catch (MalformedURLException e) {
+            Log.i("MalformedURLException", "URL not in proper format");
+            e.printStackTrace();
         } catch (IOException e) {
-            Log.i("Error","IOException");
-        } catch (Exception e) {
-            Log.i("Error","God knows what!");
+            Log.i("IOException", "connection with server");
+            e.printStackTrace();
         }
 
         return null;
     }
 
-    private String convertStreamToString(InputStream inputstream) {
-        String line = "";
-        StringBuilder total = new StringBuilder();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputstream));
-        try {
-            while ((line = reader.readLine()) != null) {
-                total.append(line);
-            }
-        } catch (Exception e) {
-            Log.i("Error","Converting stream to string");
-        }
-        return total.toString();
-    }
 }
