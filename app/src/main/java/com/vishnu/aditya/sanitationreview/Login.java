@@ -13,7 +13,6 @@ import android.widget.EditText;
 
 public class Login extends ActionBarActivity {
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +31,7 @@ public class Login extends ActionBarActivity {
         editText.setWidth(etwidth);
 
         // set a listener for the EditText
-        ((EditText)this.findViewById(R.id.empId)).setOnKeyListener(new View.OnKeyListener() {
+        this.findViewById(R.id.empId).setOnKeyListener(new View.OnKeyListener() {
 
             public boolean onKey(View v, int keyCode, KeyEvent event) {
 
@@ -56,7 +55,6 @@ public class Login extends ActionBarActivity {
         if(employeeID.matches("")){
             // alert the user to enter the ID
             empId.setError("Enter Volunteer's ID");
-            //Toast.makeText(this,"Please enter a Employee ID",Toast.LENGTH_SHORT).show();
             return;
         }
 

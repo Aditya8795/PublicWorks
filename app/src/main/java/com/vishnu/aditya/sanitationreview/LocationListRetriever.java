@@ -1,11 +1,10 @@
 package com.vishnu.aditya.sanitationreview;
 
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.Intent;
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -14,30 +13,21 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
-public class EmployeeSender extends AsyncTask<String, Void, Boolean> {
+public class LocationListRetriever extends AsyncTask<String,Void,String[]>{
 
-    String BASE_URL = "http://5313ee71.ngrok.com/admin-panel-sanitation/checkDatabase.php/?key=";
-    private Context context;
-    ProgressDialog prog;
+    String BASE_URL = "http://5313ee71.ngrok.com/admin-panel-sanitation/getLocations.php/?key=";
+    public Activity activity;
 
-    public EmployeeSender(Context loginContext) {
-        this.context = loginContext;
+    public LocationListRetriever(LocationFixer locationFixer) {
+        this.activity = locationFixer;
     }
 
     @Override
-    protected void onPreExecute() {
-        prog = new ProgressDialog(context);
-        prog.setMessage("Verifying with server");
-        prog.show();
-    }
-
-    @Override
-    protected Boolean doInBackground(String... empID) {
-
+    protected String[] doInBackground(String... approxLocation) {
         // Ensure URL is of proper form
         try {
-            URL url = new URL(BASE_URL+empID[0]);
-            Log.i("the empId",empID[0]);
+            URL url = new URL(BASE_URL+approxLocation[0]);
+            Log.i("the approx location", approxLocation[0]);
 
             URLConnection connection = url.openConnection();
             InputStream inputStream = connection.getInputStream();
@@ -58,11 +48,7 @@ public class EmployeeSender extends AsyncTask<String, Void, Boolean> {
                 String serverResponse = new String(outputByteByByte.toByteArray(), encoding);
                 Log.i("the server response",serverResponse);
 
-                if (serverResponse.equals("1")) {
-                    return Boolean.TRUE;
-                } else {
-                    return Boolean.FALSE;
-                }
+                return serverResponse.split("#");
 
             } catch (IOException e) {
                 Log.i("IOException", "buffer to outputByteByByte");
@@ -77,23 +63,16 @@ public class EmployeeSender extends AsyncTask<String, Void, Boolean> {
             e.printStackTrace();
         }
 
-        return null;
-
+        return new String[0];
     }
 
     @Override
-    protected void onPostExecute(Boolean result){
-        super.onPostExecute(result);
-        prog.dismiss();
+    protected void onPostExecute(String[] result){
+        Log.i(result[1],result[3]);
 
-        if(result == Boolean.TRUE){
-            Intent postLoginIntent = new Intent();
-            postLoginIntent.setClass(context,LocationFixer.class);
-            context.startActivity(postLoginIntent);
-        }
-        else{
-            Toast.makeText(context,"Sorry no volunteer corresponding to this ID exists",Toast.LENGTH_SHORT).show();
-        }
+        ListView list = (ListView)this.activity.findViewById(R.id.locationsList);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(activity.getApplicationContext(), R.layout.custom_textview, result);
+        list.setAdapter(adapter);
+
     }
-
 }
