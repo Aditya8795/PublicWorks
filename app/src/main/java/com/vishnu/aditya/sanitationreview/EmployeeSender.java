@@ -1,7 +1,10 @@
 package com.vishnu.aditya.sanitationreview;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -11,23 +14,26 @@ import java.net.URL;
 import java.net.URLConnection;
 
 /**
+ *
  * Created by Aditya on 1/15/2015.*vishnu
  */
 public class EmployeeSender extends AsyncTask<String, Void, Boolean> {
-    //String url = "localhost/admin-panel-sanitation/checkDatabase.php";
-    String url = "http://5313ee71.ngrok.com/admin-panel-sanitation/checkDatabase.php/?key=";
 
+    String url = "http://5313ee71.ngrok.com/admin-panel-sanitation/checkDatabase.php/?key=";
+    private Context context;
+
+    public EmployeeSender(Context loginContext) {
+        this.context = loginContext;
+    }
 
     @Override
     protected Boolean doInBackground(String... empID) {
 
-        if(empID[0]==null){
-            return null;
-        }
         // Ensure URL is of proper form
         try {
             URL tested_url = new URL(url+empID[0]);
             Log.i("the empId",empID[0]);
+
             URLConnection connection = tested_url.openConnection();
             InputStream inputStream = connection.getInputStream();
 
@@ -68,6 +74,19 @@ public class EmployeeSender extends AsyncTask<String, Void, Boolean> {
         }
 
         return null;
+
+    }
+
+    @Override
+    protected void onPostExecute(Boolean result){
+        if(result == Boolean.TRUE){
+            Intent postLoginIntent = new Intent();
+            postLoginIntent.setClass(context,locationFixer.class);
+            context.startActivity(postLoginIntent);
+        }
+        else{
+            Toast.makeText(context,"Sorry no volunteer corresponding to this ID exists",Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

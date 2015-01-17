@@ -1,25 +1,14 @@
 package com.vishnu.aditya.sanitationreview;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 
 
 public class Login extends ActionBarActivity {
@@ -30,7 +19,7 @@ public class Login extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        //customizing xml
+        //customizing xml TODO FIX THIS the notification bar is covered by the action bar
         Button button = (Button) findViewById(R.id.button);
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
@@ -41,6 +30,7 @@ public class Login extends ActionBarActivity {
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
         int etwidth = width/2;
         editText.setWidth(etwidth);
+
         // set a listener for the EditText
         ((EditText)this.findViewById(R.id.empId)).setOnKeyListener(new View.OnKeyListener() {
 
@@ -69,9 +59,9 @@ public class Login extends ActionBarActivity {
             //Toast.makeText(this,"Please enter a Employee ID",Toast.LENGTH_SHORT).show();
             return;
         }
-        Log.i("TEctcnhc","not tarted");
+
         // This sends the employee ID to the server for verification
-        new EmployeeSender().execute(employeeID);
+        new EmployeeSender(this).execute(employeeID);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
