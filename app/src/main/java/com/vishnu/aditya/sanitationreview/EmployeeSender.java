@@ -16,19 +16,27 @@ import java.net.URLConnection;
 
 public class EmployeeSender extends AsyncTask<String, Void, Boolean> {
 
-    String BASE_URL = "http://5313ee71.ngrok.com/admin-panel-sanitation/checkDatabase.php/?key=";
-    private Context context;
-    ProgressDialog prog;
+    String BASE_URL = "http://sanitation.net76.net/checkuser.php?key=";
 
+    // read and write 8kB ( 8192 bytes ) blocks at once. The number is fairly arbitrary,
+    // but for performance reasons it makes sense to use a multiple of 512 bytes when writing a file,
+    // and preferably a multiple of the disks cluster size. 8kB is a reasonable buffer size for most purposes.
+    int BUFFER_SIZE = 8192;
+
+    private Context context;
+    ProgressDialog progress;
+
+    // The constructor of the class, used to fetch the context of the view which call's it
     public EmployeeSender(Context loginContext) {
         this.context = loginContext;
     }
 
+    // Start login animation
     @Override
     protected void onPreExecute() {
-        prog = new ProgressDialog(context);
-        prog.setMessage("Verifying with server");
-        prog.show();
+        progress = new ProgressDialog(context);
+        progress.setMessage("Verifying with server");
+        progress.show();
     }
 
     @Override
@@ -46,7 +54,7 @@ public class EmployeeSender extends AsyncTask<String, Void, Boolean> {
             if (encoding == null) encoding = "UTF-8";
 
             ByteArrayOutputStream outputByteByByte = new ByteArrayOutputStream();
-            byte[] buffer = new byte[8192];
+            byte[] buffer = new byte[BUFFER_SIZE];
             int len;
             try {
                 // Read the inputStream using the buffer
@@ -58,7 +66,7 @@ public class EmployeeSender extends AsyncTask<String, Void, Boolean> {
                 String serverResponse = new String(outputByteByByte.toByteArray(), encoding);
                 Log.i("the server response",serverResponse);
 
-                if (serverResponse.equals("1")) {
+                if (serverResponse.contains("1")) {
                     return Boolean.TRUE;
                 } else {
                     return Boolean.FALSE;
@@ -84,7 +92,8 @@ public class EmployeeSender extends AsyncTask<String, Void, Boolean> {
     @Override
     protected void onPostExecute(Boolean result){
         super.onPostExecute(result);
-        prog.dismiss();
+        // Stop loading animation
+        progress.dismiss();
 
         if(result == Boolean.TRUE){
             Intent postLoginIntent = new Intent();

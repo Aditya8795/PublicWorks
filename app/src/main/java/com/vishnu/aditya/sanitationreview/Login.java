@@ -30,6 +30,11 @@ public class Login extends ActionBarActivity {
         int etwidth = width/2;
         editText.setWidth(etwidth);
 
+        // enables the activity icon as a 'home' button. required if "android:targetSdkVersion" > 14
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.drawable.sweecha);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+
         // set a listener for the EditText
         this.findViewById(R.id.empId).setOnKeyListener(new View.OnKeyListener() {
 

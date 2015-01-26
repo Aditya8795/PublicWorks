@@ -2,6 +2,7 @@ package com.vishnu.aditya.sanitationreview;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,9 +22,11 @@ public class LocationFixer extends ActionBarActivity {
 
             public boolean onKey(View v, int keyCode, KeyEvent event) {
 
+                Log.i("FIRST","yes");
                 if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
                     // if the enter key was pressed, then try logging in
-                    fetchLocations(v);
+                    fetchLocationsList(v);
+                    Log.i("Returns","True");
                     return true;
                 }
 
@@ -55,7 +58,7 @@ public class LocationFixer extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void fetchLocations(View v){
+    public void fetchLocationsList(View v){
         EditText approxLocation = (EditText)findViewById(R.id.approximateLocation);
 
         // check if user has not entered any valid string.
