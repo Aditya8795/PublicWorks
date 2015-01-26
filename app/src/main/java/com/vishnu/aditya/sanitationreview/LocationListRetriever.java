@@ -1,6 +1,7 @@
 package com.vishnu.aditya.sanitationreview;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -16,10 +17,21 @@ import java.net.URLConnection;
 public class LocationListRetriever extends AsyncTask<String,Void,String[]>{
 
     String BASE_URL = "http://sanitation.net76.net/autocomplete.php?key=";
+    // read and write 8kB ( 8192 bytes ) blocks at once. The number is fairly arbitrary,
+    // but for performance reasons it makes sense to use a multiple of 512 bytes when writing a file,
+    // and preferably a multiple of the disks cluster size. 8kB is a reasonable buffer size for most purposes.
+    int BUFFER_SIZE = 8192;
     public Activity activity;
+    ProgressDialog progress;
+    public LocationListRetriever(LocationFixer locationFixer) { this.activity = locationFixer; }
 
-    public LocationListRetriever(LocationFixer locationFixer) {
-        this.activity = locationFixer;
+    // Start login animation
+    @Override
+    protected void onPreExecute() {
+        progress = new ProgressDialog(activity);
+        progress.setMessage("Verifying with server");
+        progress.setCancelable(false);
+        progress.show();
     }
 
     @Override
@@ -36,7 +48,7 @@ public class LocationListRetriever extends AsyncTask<String,Void,String[]>{
             if (encoding == null) encoding = "UTF-8";
 
             ByteArrayOutputStream outputByteByByte = new ByteArrayOutputStream();
-            byte[] byteBuffer = new byte[8192];
+            byte[] byteBuffer = new byte[BUFFER_SIZE];
             int len;
             try {
                 // Read the inputStream using the buffer
@@ -69,9 +81,14 @@ public class LocationListRetriever extends AsyncTask<String,Void,String[]>{
     }
 
     @Override
-    protected void onPostExecute(String[] result){
+    protected void onPostExecute(String[] locations){
+        super.onPostExecute(locations);
+        // Stop loading animation
+        progress.dismiss();
+
+        // Put the locations we fetched into the ListView
         ListView listOfLocations = (ListView)this.activity.findViewById(R.id.locationsList);
-        ArrayAdapter<String> locationsAdapter = new ArrayAdapter<>(activity.getApplicationContext(), R.layout.custom_textview, result);
+        ArrayAdapter<String> locationsAdapter = new ArrayAdapter<>(activity.getApplicationContext(), R.layout.custom_textview, locations);
         listOfLocations.setAdapter(locationsAdapter);
     }
 }

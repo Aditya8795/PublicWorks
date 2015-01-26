@@ -17,7 +17,6 @@ import java.net.URLConnection;
 public class EmployeeSender extends AsyncTask<String, Void, Boolean> {
 
     String BASE_URL = "http://sanitation.net76.net/checkuser.php?key=";
-
     // read and write 8kB ( 8192 bytes ) blocks at once. The number is fairly arbitrary,
     // but for performance reasons it makes sense to use a multiple of 512 bytes when writing a file,
     // and preferably a multiple of the disks cluster size. 8kB is a reasonable buffer size for most purposes.
@@ -36,6 +35,7 @@ public class EmployeeSender extends AsyncTask<String, Void, Boolean> {
     protected void onPreExecute() {
         progress = new ProgressDialog(context);
         progress.setMessage("Verifying with server");
+        progress.setCancelable(false);
         progress.show();
     }
 
@@ -92,9 +92,20 @@ public class EmployeeSender extends AsyncTask<String, Void, Boolean> {
     @Override
     protected void onPostExecute(Boolean result){
         super.onPostExecute(result);
-        // Stop loading animation
-        progress.dismiss();
+        try{
+            // Stop loading animation
+            progress.dismiss();
+        }
+        catch(IllegalArgumentException e){
+            Log.i(e.toString(),"Mobile State changed");
+            return;
+        }
 
+        // In case no internet
+        if(result == null){
+            Toast.makeText(context,"Please ensure you have internet and try again",Toast.LENGTH_SHORT).show();
+            return;
+        }
         if(result == Boolean.TRUE){
             Intent postLoginIntent = new Intent();
             postLoginIntent.setClass(context,LocationFixer.class);

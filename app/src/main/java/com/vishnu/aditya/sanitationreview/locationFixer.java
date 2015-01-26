@@ -33,6 +33,11 @@ public class LocationFixer extends ActionBarActivity {
                 return false;
             }
         });
+
+        // enables the activity icon as a 'home' button. required if "android:targetSdkVersion" > 14
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.drawable.logo);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
     }
 
 

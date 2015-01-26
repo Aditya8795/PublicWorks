@@ -2,12 +2,10 @@ package com.vishnu.aditya.sanitationreview;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 
 
@@ -18,21 +16,9 @@ public class Login extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        //customizing xml TODO FIX THIS the notification bar is covered by the action bar
-        Button button = (Button) findViewById(R.id.button);
-        DisplayMetrics displaymetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-        int width = displaymetrics.widthPixels;
-        int buttonWidth = width/3;
-        button.setWidth(buttonWidth);
-        EditText editText = (EditText) findViewById(R.id.empId);
-        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-        int etwidth = width/2;
-        editText.setWidth(etwidth);
-
         // enables the activity icon as a 'home' button. required if "android:targetSdkVersion" > 14
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setLogo(R.drawable.sweecha);
+        getSupportActionBar().setLogo(R.drawable.logo);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
 
         // set a listener for the EditText
