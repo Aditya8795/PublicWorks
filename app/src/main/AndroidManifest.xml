@@ -27,6 +27,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.vishnu.aditya.sanitationreview.Login" />
         </activity>
+        <activity
+            android:name=".GPSlocation"
+            android:label="@string/title_activity_gpslocation"
+            android:parentActivityName=".LocationFixer" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.vishnu.aditya.sanitationreview.LocationFixer" />
+        </activity>
     </application>
 
 </manifest>

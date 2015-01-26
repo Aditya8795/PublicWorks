@@ -29,7 +29,7 @@ public class LocationListRetriever extends AsyncTask<String,Void,String[]>{
     @Override
     protected void onPreExecute() {
         progress = new ProgressDialog(activity);
-        progress.setMessage("Verifying with server");
+        progress.setMessage("Fetching similar locations");
         progress.setCancelable(false);
         progress.show();
     }
@@ -88,7 +88,7 @@ public class LocationListRetriever extends AsyncTask<String,Void,String[]>{
 
         // Put the locations we fetched into the ListView
         ListView listOfLocations = (ListView)this.activity.findViewById(R.id.locationsList);
-        ArrayAdapter<String> locationsAdapter = new ArrayAdapter<>(activity.getApplicationContext(), R.layout.custom_textview, locations);
+        ArrayAdapter<String> locationsAdapter = new ArrayAdapter<>(activity.getApplicationContext(), R.layout.location_textview_listviewrow, locations);
         listOfLocations.setAdapter(locationsAdapter);
     }
 }

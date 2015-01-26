@@ -10,5 +10,6 @@
     <string name="fetchLocations">Get list of locations</string>
     <string name="approxLocation">Enter your approximate location</string>
     <string name="title_activity_location_list_retriever">LocationListRetriever</string>
+    <string name="title_activity_gpslocation">GPS Verification</string>
 
 </resources>

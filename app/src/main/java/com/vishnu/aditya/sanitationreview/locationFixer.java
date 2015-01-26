@@ -1,5 +1,6 @@
 package com.vishnu.aditya.sanitationreview;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -17,20 +18,32 @@ public class LocationFixer extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location_fixer);
 
+        // Set a onclick listener for the list of locations
+        this.findViewById(R.id.locationsList).setOnClickListener(new  View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                Intent postLocationList = new Intent();
+                postLocationList.setClass(v.getContext(), GPSlocation.class);
+                v.getContext().startActivity(postLocationList);
+            }
+        });
+        
         // set a listener for the EditText
-        this.findViewById(R.id.approximateLocation).setOnKeyListener(new View.OnKeyListener() {
+        this.findViewById(R.id.approximateLocation).setOnItemClickListener(new View.OnClickListener() {
 
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
+            @Override
+            public void onClick(View v) {
 
-                Log.i("FIRST","yes");
+                Log.i("FIRST", "yes");
                 if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
                     // if the enter key was pressed, then try logging in
                     fetchLocationsList(v);
-                    Log.i("Returns","True");
-                    return true;
+                    Log.i("Returns", "True");
+                    return;
                 }
 
-                return false;
+                return;
             }
         });
 
