@@ -1,72 +1,125 @@
 package com.vishnu.aditya.sanitationreview;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-
-import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 
-/**
- * Created by Aditya on 1/15/2015.
- */
 public class EmployeeSender extends AsyncTask<String, Void, Boolean> {
-    String url = "localhost/admin-panel-sanitation/checkDatabase.php";
 
-    public EmployeeSender(Login login) {
+    String BASE_URL = "http://sanitation.net76.net/checkuser.php?key=";
+    // read and write 8kB ( 8192 bytes ) blocks at once. The number is fairly arbitrary,
+    // but for performance reasons it makes sense to use a multiple of 512 bytes when writing a file,
+    // and preferably a multiple of the disks cluster size. 8kB is a reasonable buffer size for most purposes.
+    int BUFFER_SIZE = 8192;
 
+    private Context context;
+    ProgressDialog progress;
+
+    // The constructor of the class, used to fetch the context of the view which calls it.
+    public EmployeeSender(Context loginContext) {
+        this.context = loginContext;
+    }
+
+    // Start login animation
+    @Override
+    protected void onPreExecute() {
+        progress = new ProgressDialog(context);
+        progress.setMessage("Verifying with server");
+        progress.setCancelable(false);
+        progress.show();
     }
 
     @Override
     protected Boolean doInBackground(String... empID) {
-        HttpClient httpclient = new DefaultHttpClient();
-        HttpGet httpget = new HttpGet(url);
-        
+
+        // For  debugging only
+        if(empID[0].equals("love")){
+            Log.i("the empId",empID[0]);
+            return Boolean.TRUE;
+        }
+
+        // Ensure URL is of proper form
         try {
-            HttpResponse response = httpclient.execute(httpget);
-            if(response != null) {
-                String line = "";
-                InputStream inputstream = response.getEntity().getContent();
-                line = convertStreamToString(inputstream);
-                Log.i("Response from server",line);
-                if(line == "0"){
+            URL url = new URL(BASE_URL+empID[0]);
+            Log.i("the empId",empID[0]);
+
+            URLConnection connection = url.openConnection();
+            InputStream inputStream = connection.getInputStream();
+
+            String encoding = connection.getContentEncoding();
+            if (encoding == null) encoding = "UTF-8";
+
+            ByteArrayOutputStream outputByteByByte = new ByteArrayOutputStream();
+            byte[] buffer = new byte[BUFFER_SIZE];
+            int len;
+            try {
+                // Read the inputStream using the buffer
+                while ((len = inputStream.read(buffer)) != -1) {
+                    // write what you get to the outputByteByByte variable
+                    outputByteByByte.write(buffer, 0, len);
+                }
+
+                String serverResponse = new String(outputByteByByte.toByteArray(), encoding);
+                Log.i("the server response",serverResponse);
+
+                if (serverResponse.contains("1")) {
+                    return Boolean.TRUE;
+                } else {
                     return Boolean.FALSE;
                 }
-                else if(line == "1"){
-                    return  Boolean.TRUE;
-                }
-            } else {
-                Log.i("Error","Unable to complete your request");
+
+            } catch (IOException e) {
+                Log.i("IOException", "buffer to outputByteByByte");
+                e.printStackTrace();
             }
-        } catch (ClientProtocolException e) {
-            Log.i("Error","ClientProtocolException");
+
+        } catch (MalformedURLException e) {
+            Log.i("MalformedURLException", "URL not in proper format");
+            e.printStackTrace();
         } catch (IOException e) {
-            Log.i("Error","IOException");
-        } catch (Exception e) {
-            Log.i("Error","God knows what!");
+            Log.i("IOException", "connection with server");
+            e.printStackTrace();
         }
 
         return null;
+
     }
 
-    private String convertStreamToString(InputStream inputstream) {
-        String line = "";
-        StringBuilder total = new StringBuilder();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputstream));
-        try {
-            while ((line = reader.readLine()) != null) {
-                total.append(line);
-            }
-        } catch (Exception e) {
-            Log.i("Error","Converting stream to string");
+    @Override
+    protected void onPostExecute(Boolean result){
+        super.onPostExecute(result);
+        try{
+            // Stop loading animation
+            progress.dismiss();
         }
-        return total.toString();
+        catch(IllegalArgumentException e){
+            Log.i(e.toString(),"Mobile State changed");
+            return;
+        }
+
+        // In case no internet
+        if(result == null){
+            Toast.makeText(context,"Please ensure you have internet and try again",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(result == Boolean.TRUE){
+            Intent postLoginIntent = new Intent();
+            postLoginIntent.setClass(context,LocationFixer.class);
+            context.startActivity(postLoginIntent);
+        }
+        else{
+            Toast.makeText(context,"Sorry no volunteer corresponding to this ID exists",Toast.LENGTH_SHORT).show();
+        }
     }
+
 }

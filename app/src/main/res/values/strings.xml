@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">SanitationReview</string>
+    <string name="app_name">T-App</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="login_hint">Enter Employee ID</string>
+    <string name="login_hint">Volunteer\'s ID</string>
     <string name="login">LOGIN</string>
+    <string name="title_activity_location_fixer">locationFixer</string>
+    <string name="fetchLocations">Get list of locations</string>
+    <string name="approxLocation">Enter your approximate location</string>
+    <string name="title_activity_location_list_retriever">LocationListRetriever</string>
+    <string name="title_activity_gpslocation">GPS Verification</string>
+    <string name="thereornot">Does the Public Utility exist there?</string>
+    <string name="itthere">It doest exist</string>
+    <string name="submit">Submit to Server</string>
+    <string name="title_activity_rate_utility">Rate The Utility</string>
+    <string name="rate">Rate The Utility</string>
 
 </resources>

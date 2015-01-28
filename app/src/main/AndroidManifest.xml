@@ -2,19 +2,48 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.vishnu.aditya.sanitationreview" >
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/logo"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
             android:name=".Login"
+            android:configChanges="orientation|keyboardHidden"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".LocationFixer"
+            android:label="@string/title_activity_location_fixer"
+            android:parentActivityName=".Login" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.vishnu.aditya.sanitationreview.Login" />
+        </activity>
+        <activity
+            android:name=".GPSLocation"
+            android:label="@string/title_activity_gpslocation"
+            android:parentActivityName=".LocationFixer" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.vishnu.aditya.sanitationreview.LocationFixer" />
+        </activity>
+        <activity
+            android:name=".RateUtility"
+            android:label="@string/title_activity_rate_utility"
+            android:parentActivityName=".GPSLocation" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.vishnu.aditya.sanitationreview.GPSLocation" />
         </activity>
     </application>
 
