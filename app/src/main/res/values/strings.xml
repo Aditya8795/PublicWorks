@@ -11,5 +11,10 @@
     <string name="approxLocation">Enter your approximate location</string>
     <string name="title_activity_location_list_retriever">LocationListRetriever</string>
     <string name="title_activity_gpslocation">GPS Verification</string>
+    <string name="thereornot">Does the Public Utility exist there?</string>
+    <string name="itthere">It doest exist</string>
+    <string name="submit">Submit to Server</string>
+    <string name="title_activity_rate_utility">Rate The Utility</string>
+    <string name="rate">Rate The Utility</string>
 
 </resources>

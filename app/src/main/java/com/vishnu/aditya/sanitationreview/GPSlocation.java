@@ -1,19 +1,84 @@
 package com.vishnu.aditya.sanitationreview;
 
-import android.support.v7.app.ActionBarActivity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 
 
-public class GPSlocation extends ActionBarActivity {
+public class GPSLocation extends ActionBarActivity {
+
+    LocationManager locationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gpslocation);
+
+        //Set a listener for the checkbox
+        CheckBox existsthere = (CheckBox) this.findViewById(R.id.checkBox);
+        existsthere.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    buttonView.setText("Its here - Exists");
+                }
+                else{
+                    buttonView.setText("Its not here - Doesn't exist");
+                }
+
+
+            }
+        });
+    }
+    @Override
+    protected void onResume(){
+        super.onResume();
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        // Getting GPS status
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            showGPSDisabledAlertToUser();
+        }
     }
 
+    // IT does what its name says, pretty clear I hope.
+    private void showGPSDisabledAlertToUser(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("GPS is disabled in your device. Would you like to enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Go to Settings Page To Enable GPS",
+                        new DialogInterface.OnClickListener(){
+                            public void onClick(DialogInterface dialog, int id){
+                                Intent callGPSSettingIntent = new Intent(
+                                        android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                startActivity(callGPSSettingIntent);
+                            }
+                        });
+        alertDialogBuilder.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int id){
+                        dialog.cancel();
+                        onBackPressed();
+                    }
+                });
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
+    }
+
+    public void existsToServer(View v){
+        Intent intent = new Intent(this,RateUtility.class);
+        //intent.putExtra(EXTRA_LOCATION, locations[position]);
+        this.startActivity(intent);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

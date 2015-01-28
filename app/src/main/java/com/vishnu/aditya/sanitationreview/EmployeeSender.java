@@ -25,7 +25,7 @@ public class EmployeeSender extends AsyncTask<String, Void, Boolean> {
     private Context context;
     ProgressDialog progress;
 
-    // The constructor of the class, used to fetch the context of the view which call's it
+    // The constructor of the class, used to fetch the context of the view which calls it.
     public EmployeeSender(Context loginContext) {
         this.context = loginContext;
     }
@@ -43,9 +43,11 @@ public class EmployeeSender extends AsyncTask<String, Void, Boolean> {
     protected Boolean doInBackground(String... empID) {
 
         // For  debugging only
-        if(empID[0] == "love"){
-            return true;
+        if(empID[0].equals("love")){
+            Log.i("the empId",empID[0]);
+            return Boolean.TRUE;
         }
+
         // Ensure URL is of proper form
         try {
             URL url = new URL(BASE_URL+empID[0]);

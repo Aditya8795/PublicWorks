@@ -3,6 +3,8 @@
     package="com.vishnu.aditya.sanitationreview" >
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -28,12 +30,20 @@
                 android:value="com.vishnu.aditya.sanitationreview.Login" />
         </activity>
         <activity
-            android:name=".GPSlocation"
+            android:name=".GPSLocation"
             android:label="@string/title_activity_gpslocation"
             android:parentActivityName=".LocationFixer" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.vishnu.aditya.sanitationreview.LocationFixer" />
+        </activity>
+        <activity
+            android:name=".RateUtility"
+            android:label="@string/title_activity_rate_utility"
+            android:parentActivityName=".GPSLocation" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.vishnu.aditya.sanitationreview.GPSLocation" />
         </activity>
     </application>
 

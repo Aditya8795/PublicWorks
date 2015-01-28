@@ -2,8 +2,11 @@ package com.vishnu.aditya.sanitationreview;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -17,6 +20,7 @@ import java.net.URLConnection;
 public class LocationListRetriever extends AsyncTask<String,Void,String[]>{
 
     String BASE_URL = "http://sanitation.net76.net/autocomplete.php?key=";
+    String EXTRA_LOCATION = "com.vishnu.aditya.sanitationreview.LOCATION";
     // read and write 8kB ( 8192 bytes ) blocks at once. The number is fairly arbitrary,
     // but for performance reasons it makes sense to use a multiple of 512 bytes when writing a file,
     // and preferably a multiple of the disks cluster size. 8kB is a reasonable buffer size for most purposes.
@@ -81,7 +85,7 @@ public class LocationListRetriever extends AsyncTask<String,Void,String[]>{
     }
 
     @Override
-    protected void onPostExecute(String[] locations){
+    protected void onPostExecute(final String[] locations){
         super.onPostExecute(locations);
         // Stop loading animation
         progress.dismiss();
@@ -90,5 +94,15 @@ public class LocationListRetriever extends AsyncTask<String,Void,String[]>{
         ListView listOfLocations = (ListView)this.activity.findViewById(R.id.locationsList);
         ArrayAdapter<String> locationsAdapter = new ArrayAdapter<>(activity.getApplicationContext(), R.layout.location_textview_listviewrow, locations);
         listOfLocations.setAdapter(locationsAdapter);
+        listOfLocations.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Send them to the next activity
+                Intent intent = new Intent(activity,GPSLocation.class);
+                intent.putExtra(EXTRA_LOCATION, locations[position]);
+                activity.startActivity(intent);
+            }
+        });
     }
 }
