@@ -16,5 +16,6 @@
     <string name="submit">Submit to Server</string>
     <string name="title_activity_rate_utility">Rate The Utility</string>
     <string name="rate">Rate The Utility</string>
+    <string name="title_activity_capture_images">CaptureImages</string>
 
 </resources>

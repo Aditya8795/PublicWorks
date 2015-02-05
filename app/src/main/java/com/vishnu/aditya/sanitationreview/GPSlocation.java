@@ -75,7 +75,7 @@ public class GPSLocation extends ActionBarActivity {
     }
 
     public void existsToServer(View v){
-        Intent intent = new Intent(this,RateUtility.class);
+        Intent intent = new Intent(this,CaptureImages.class);
         //intent.putExtra(EXTRA_LOCATION, locations[position]);
         this.startActivity(intent);
     }

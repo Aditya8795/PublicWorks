@@ -45,6 +45,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.vishnu.aditya.sanitationreview.GPSLocation" />
         </activity>
+        <activity
+            android:name=".CaptureImages"
+            android:label="@string/title_activity_capture_images"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".GPSLocation" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.vishnu.aditya.sanitationreview.GPSLocation" />
+        </activity>
     </application>
 
 </manifest>
