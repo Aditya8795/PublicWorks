@@ -35,7 +35,7 @@
             android:parentActivityName=".LocationFixer" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.vishnu.aditya.sanitationreview.LocationFixer" />
+                android:value=".LocationFixer" />
         </activity>
         <activity
             android:name=".RateUtility"
